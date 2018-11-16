@@ -25,37 +25,44 @@
                                 </div>
                             </form>
                         </div>
+                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal"
+								data-target="#modal-create">Create</button>
                     </div>
                 </div>
             </nav>
             <section class="result">
             	<div class="container">
+                    <!-- Add Notifications Here (If Any) -->
+                    {% if messages %}
+                    	{% for message in messages %}
+                    		<div class="alert alert-{{message.tags}}">
+                                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                {{message}}
+                    		</div>
+                    	{% endfor %}
+                    {% endif %}
+                    <!-- Display All Movies -->
                     <div class="movies">
                         {% for movie in search_result %}
-                        <div class="movies__item">
-                            <i class="movies__item-star fas fa-star hide"></i>
-                            <p class="movies__item-rating hide">{{movie.fields.Rating}}/10</p>
-                            <img class="movies__item-image" src="{{movie.fields.Pictures.0.url}}" alt="" />
-                            <div class="movies__item-title">
-                                <p>{{movie.fields.Name}}</p>
+                            <div class="movies__item">
+                                <i class="movies__item-star fas fa-star hide"></i>
+                                <p class="movies__item-rating hide">{{movie.fields.Rating}}/10</p>
+                                <button type="button" class="movies__item-expander hide" data-toggle="modal" data-target="#modal-{{movie.id}}">Details</button>
+                                <img class="movies__item-image" src="{{movie.fields.Pictures.0.url}}" alt="" />
+                                <div class="movies__item-title">
+                                    <p>{{movie.fields.Name}}</p>
+                                </div>
                             </div>
-                        </div>
+                            {% include 'movies/detail-modal.html' %}
+                        	{% include 'movies/edit-modal.html' %}
                         {% endfor %}
                     </div>
                 </div>
             </section>
         </div>
-        <!-- OLD CODE
-		<form action="" name="search">
-			<input type="text" name='query' value="{{request.GET.query}}"/>
-			<input type="submit" value="Search"/>
-		</form>
 
-		{% for movie in search_result %}
-			<p>{{movie.fields.Name}}</p>
-			<img src="{{movie.fields.Pictures.0.url}}"  alt=""/>
-		{% endfor %}
-		-->
+        {% include "movies/create-modal.html" %}
+
         <!-- JAVASCRIPTS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
